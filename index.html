@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ResQGo | Emergency Response System</title>
+
+  <!-- Leaflet Map -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
+
+  <header class="app-header">
+
+    <div class="brand">
+      <span class="brand-icon">🚨</span>
+
+      <div>
+        <div class="brand-name">ResQGo</div>
+        <small>Emergency Response Network</small>
+      </div>
+    </div>
+
+    <nav
+      class="nav-menu"
+      id="navMenu"
+      style="display: none;"
+    >
+
+      <a
+        href="#dashboard"
+        class="nav-item"
+        data-view="dashboard"
+      >
+        Dashboard
+      </a>
+
+      <a
+        href="#resources"
+        class="nav-item"
+        data-view="resources"
+      >
+        Resources
+      </a>
+
+      <a
+        href="#profile"
+        class="nav-item"
+        data-view="profile"
+      >
+        Profile
+      </a>
+
+      <a
+        href="#admin"
+        class="nav-item admin-only"
+        data-view="admin"
+        style="display: none;"
+      >
+        Admin Panel
+      </a>
+
+      <div
+        class="user-badge"
+        id="userRoleBadge"
+      >
+        Role: Guest
+      </div>
+
+      <button
+        class="btn btn-outline-light btn-sm"
+        id="logoutBtn"
+      >
+        Logout
+      </button>
+
+    </nav>
+
+  </header>
+
+
+  <!-- =====================================================
+       SYSTEM ALERTS
+  ====================================================== -->
+
+  <div
+    class="alert-container"
+    id="alertContainer"
+  ></div>
+
+
+  <!-- =====================================================
+       MAIN APPLICATION
+  ====================================================== -->
+
+  <main class="main-content">
+
+
+    <!-- ===================================================
+         AUTHENTICATION VIEW
+    ==================================================== -->
+
+    <section
+      id="view-auth"
+      class="app-view"
+    >
+
+      <div class="auth-wrapper">
+
+        <div class="auth-header">
+
+          <div class="auth-logo">
+            🚨
+          </div>
+
+          <h1>
+            ResQGo Emergency Network
+          </h1>
+
+          <p>
+            Fast. Reliable. Connected Emergency Response.
+          </p>
+
+        </div>
+
+
+        <div class="auth-grid">
+
+
+          <!-- REGISTER -->
+
+          <div class="card">
+
+            <div class="card-heading">
+              <span class="heading-icon">👤</span>
+
+              <div>
+                <h3>Create Account</h3>
+
+                <p>
+                  Register for emergency services
+                </p>
+              </div>
+            </div>
+
+
+            <form id="registerForm">
+
+              <div class="form-group">
+
+                <label for="regName">
+                  Full Name
+                </label>
+
+                <input
+                  type="text"
+                  id="regName"
+                  required
+                  placeholder="Enter your full name"
+                >
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label for="regEmail">
+                  Email Address
+                </label>
+
+                <input
+                  type="email"
+                  id="regEmail"
+                  required
+                  placeholder="you@example.com"
+                >
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label for="regPhone">
+                  Phone Number
+                </label>
+
+                <input
+                  type="tel"
+                  id="regPhone"
+                  required
+                  placeholder="+91 9876543210"
+                >
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label for="regRole">
+                  Account Role
+                </label>
+
+                <select id="regRole">
+
+                  <option value="User">
+                    User (Citizen)
+                  </option>
+
+                  <option value="Administrator">
+                    Administrator
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label for="regPass">
+                  Password
+                </label>
+
+                <input
+                  type="password"
+                  id="regPass"
+                  required
+                  placeholder="Create a password"
+                >
+
+              </div>
+
+
+              <button
+                type="submit"
+                class="btn btn-dark btn-block"
+              >
+                Create Account
+              </button>
+
+            </form>
+
+          </div>
+
+
+          <!-- LOGIN -->
+
+          <div class="card card-accent">
+
+            <div class="card-heading">
+
+              <span class="heading-icon">
+                🔐
+              </span>
+
+              <div>
+
+                <h3>
+                  System Login
+                </h3>
+
+                <p>
+                  Access your ResQGo account
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <form id="loginForm">
+
+              <div class="form-group">
+
+                <label for="loginEmail">
+                  Email Address
+                </label>
+
+                <input
+                  type="email"
+                  id="loginEmail"
+                  required
+                  value="admin@resqgo.org"
+                >
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label for="loginPass">
+                  Password
+                </label>
+
+                <input
+                  type="password"
+                  id="loginPass"
+                  required
+                  value="admin123"
+                >
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label for="loginRoleSelect">
+                  Login Role
+                </label>
+
+                <select id="loginRoleSelect">
+
+                  <option value="User">
+                    User
+                  </option>
+
+                  <option
+                    value="Administrator"
+                    selected
+                  >
+                    Administrator
+                  </option>
+
+                </select>
+
+              </div>
+
+
+              <button
+                type="submit"
+                class="btn btn-primary btn-block"
+              >
+                🔐 Authenticate Session
+              </button>
+
+            </form>
+
+
+            <div class="demo-login">
+
+              <strong>Demo Accounts</strong>
+
+              <p>
+                <b>Admin:</b>
+                admin@resqgo.org / admin123
+              </p>
+
+              <p>
+                <b>User:</b>
+                user@resqgo.org / user123
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         DASHBOARD
+    ==================================================== -->
+
+    <section
+      id="view-dashboard"
+      class="app-view"
+      style="display: none;"
+    >
+
+
+      <!-- SOS AREA -->
+
+      <div class="sos-banner">
+
+        <div class="sos-content">
+
+          <div class="sos-icon">
+            🚨
+          </div>
+
+          <div>
+
+            <span class="section-label">
+              EMERGENCY RESPONSE
+            </span>
+
+            <h2>
+              Need Immediate Help?
+            </h2>
+
+            <p>
+              Dispatch emergency assistance instantly.
+              Your request will be logged in the system.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <button
+          class="btn btn-danger btn-lg"
+          id="triggerSosBtn"
+        >
+          🚨 DISPATCH SOS
+        </button>
+
+      </div>
+
+
+      <!-- DASHBOARD STATS -->
+
+      <div class="stats-grid">
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            🏥
+          </div>
+
+          <div>
+
+            <span>
+              Emergency Resources
+            </span>
+
+            <strong id="resourceCount">
+              —
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            🚑
+          </div>
+
+          <div>
+
+            <span>
+              Available Services
+            </span>
+
+            <strong>
+              24/7
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            📍
+          </div>
+
+          <div>
+
+            <span>
+              Live Location
+            </span>
+
+            <strong>
+              GIS Active
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-icon">
+            🛡️
+          </div>
+
+          <div>
+
+            <span>
+              Network Status
+            </span>
+
+            <strong class="status-online">
+              ● Online
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- MAP + INCIDENTS -->
+
+      <div class="dashboard-grid">
+
+
+        <!-- MAP -->
+
+        <div class="card map-card">
+
+          <div class="card-top">
+
+            <div>
+
+              <span class="section-label">
+                LIVE GIS
+              </span>
+
+              <h3>
+                Emergency Resource Map
+              </h3>
+
+            </div>
+
+            <span class="live-badge">
+              ● LIVE
+            </span>
+
+          </div>
+
+          <div id="map"></div>
+
+        </div>
+
+
+        <!-- INCIDENT LOG -->
+
+        <div class="card">
+
+          <div class="card-top">
+
+            <div>
+
+              <span class="section-label">
+                ACTIVITY
+              </span>
+
+              <h3>
+                Incident Log
+              </h3>
+
+            </div>
+
+          </div>
+
+
+          <div class="table-wrapper">
+
+            <table>
+
+              <thead>
+
+                <tr>
+
+                  <th>ID</th>
+                  <th>Type</th>
+                  <th>Time</th>
+                  <th>Status</th>
+                  <th>Action</th>
+
+                </tr>
+
+              </thead>
+
+              <tbody
+                id="incidentLogTable"
+              ></tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         RESOURCE DIRECTORY
+    ==================================================== -->
+
+    <section
+      id="view-resources"
+      class="app-view"
+      style="display: none;"
+    >
+
+      <div class="page-header">
+
+        <div>
+
+          <span class="section-label">
+            EMERGENCY NETWORK
+          </span>
+
+          <h2>
+            Resource Directory
+          </h2>
+
+          <p>
+            Find hospitals, ambulances, police and fire
+            stations near you.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="directory-toolbar">
+
+          <div>
+
+            <h3>
+              Emergency Facilities
+            </h3>
+
+            <p>
+              Search and request emergency assistance.
+            </p>
+
+          </div>
+
+
+          <input
+            type="text"
+            id="resourceSearch"
+            placeholder="🔍 Search resources..."
+          >
+
+        </div>
+
+
+        <!-- CATEGORY FILTER -->
+
+        <div
+          class="category-pills"
+          id="categoryPills"
+        ></div>
+
+
+        <!-- RESOURCE TABLE -->
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Resource Facility
+                </th>
+
+                <th>
+                  Category
+                </th>
+
+                <th>
+                  Contact
+                </th>
+
+                <th>
+                  Location
+                </th>
+
+                <th>
+                  Operating Hours
+                </th>
+
+                <th>
+                  Action
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody
+              id="resourceDirectoryTable"
+            ></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         PROFILE
+    ==================================================== -->
+
+    <section
+      id="view-profile"
+      class="app-view"
+      style="display: none;"
+    >
+
+      <div class="page-header">
+
+        <div>
+
+          <span class="section-label">
+            ACCOUNT
+          </span>
+
+          <h2>
+            Security Profile
+          </h2>
+
+          <p>
+            Manage your ResQGo account information.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="profile-layout">
+
+
+        <div class="card profile-card">
+
+          <div class="profile-avatar">
+            👤
+          </div>
+
+          <h3>
+            Account Information
+          </h3>
+
+          <p>
+            Keep your emergency contact details updated.
+          </p>
+
+
+          <form
+            id="profileForm"
+            class="profile-form"
+          >
+
+            <div class="form-group">
+
+              <label for="profName">
+                Full Name
+              </label>
+
+              <input
+                type="text"
+                id="profName"
+                value="Authorized User"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="profEmail">
+                Email Address
+              </label>
+
+              <input
+                type="email"
+                id="profEmail"
+                value="user@resqgo.org"
+                disabled
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="profPhone">
+                Contact Phone
+              </label>
+
+              <input
+                type="text"
+                id="profPhone"
+                value="+91 9876543210"
+              >
+
+            </div>
+
+
+            <button
+              type="submit"
+              class="btn btn-dark"
+            >
+              Save Profile Changes
+            </button>
+
+          </form>
+
+        </div>
+
+
+        <div class="card security-card">
+
+          <div class="security-icon">
+            🛡️
+          </div>
+
+          <h3>
+            Account Security
+          </h3>
+
+          <p>
+            Your account is protected using authenticated
+            sessions and role-based access control.
+          </p>
+
+
+          <div class="security-item">
+
+            <span>
+              Authentication
+            </span>
+
+            <strong>
+              Active
+            </strong>
+
+          </div>
+
+
+          <div class="security-item">
+
+            <span>
+              Session Security
+            </span>
+
+            <strong>
+              Protected
+            </strong>
+
+          </div>
+
+
+          <div class="security-item">
+
+            <span>
+              RBAC
+            </span>
+
+            <strong>
+              Enabled
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         ADMIN PANEL
+    ==================================================== -->
+
+    <section
+      id="view-admin"
+      class="app-view"
+      style="display: none;"
+    >
+
+
+      <!-- ADMIN HEADER -->
+
+      <div class="page-header admin-header">
+
+        <div>
+
+          <span class="section-label">
+            SYSTEM MANAGEMENT
+          </span>
+
+          <h2>
+            Administrator Panel
+          </h2>
+
+          <p>
+            Manage emergency resources and system alerts.
+          </p>
+
+        </div>
+
+
+        <span class="badge badge-admin">
+          🛡️ ADMINISTRATOR
+        </span>
+
+      </div>
+
+
+      <div class="admin-grid">
+
+
+        <!-- RESOURCE FORM -->
+
+        <div class="card">
+
+          <div class="card-heading">
+
+            <span class="heading-icon">
+              🏥
+            </span>
+
+            <div>
+
+              <h3 id="adminFormTitle">
+                Register Emergency Resource
+              </h3>
+
+              <p>
+                Add a new emergency facility.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <form
+            id="adminAddResourceForm"
+            class="admin-form"
+          >
+
+            <input
+              type="hidden"
+              id="admResId"
+            >
+
+
+            <div class="form-group">
+
+              <label for="admResName">
+                Facility Name
+              </label>
+
+              <input
+                type="text"
+                id="admResName"
+                required
+                placeholder="General Hospital"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="admResCategory">
+                Category
+              </label>
+
+              <select
+                id="admResCategory"
+                required
+              ></select>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="admResContact">
+                Emergency Helpline
+              </label>
+
+              <input
+                type="text"
+                id="admResContact"
+                required
+                placeholder="+91 102"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label for="admResAddress">
+                Physical Address
+              </label>
+
+              <input
+                type="text"
+                id="admResAddress"
+                required
+                placeholder="Andheri East, Mumbai"
+              >
+
+            </div>
+
+
+            <div class="form-row">
+
+              <div class="form-group">
+
+                <label for="admResLat">
+                  Latitude
+                </label>
+
+                <input
+                  type="number"
+                  step="any"
+                  id="admResLat"
+                  value="19.0760"
+                  required
+                >
+
+              </div>
+
+
+              <div class="form-group">
+
+                <label for="admResLng">
+                  Longitude
+                </label>
+
+                <input
+                  type="number"
+                  step="any"
+                  id="admResLng"
+                  value="72.8777"
+                  required
+                >
+
+              </div>
+
+            </div>
+
+
+            <button
+              type="submit"
+              class="btn btn-primary btn-block"
+              id="adminFormBtn"
+            >
+              + Add Resource
+            </button>
+
+
+            <button
+              type="button"
+              class="btn btn-dark btn-block"
+              id="adminCancelEditBtn"
+              style="display:none;"
+            >
+              Cancel Edit
+            </button>
+
+          </form>
+
+        </div>
+
+
+        <!-- ADMIN CONTROLS -->
+
+        <div>
+
+
+          <!-- BROADCAST -->
+
+          <div class="card card-accent">
+
+            <div class="card-heading">
+
+              <span class="heading-icon">
+                📢
+              </span>
+
+              <div>
+
+                <h3>
+                  Broadcast Alert
+                </h3>
+
+                <p>
+                  Send emergency notifications.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <form
+              id="adminAlertForm"
+              class="admin-form"
+            >
+
+              <div class="form-group">
+
+                <label for="admAlertMsg">
+                  Alert Message
+                </label>
+
+                <input
+                  type="text"
+                  id="admAlertMsg"
+                  placeholder="Heavy Rain Warning..."
+                  required
+                >
+
+              </div>
+
+
+              <button
+                type="submit"
+                class="btn btn-danger btn-block"
+              >
+                📢 Broadcast Alert
+              </button>
+
+            </form>
+
+          </div>
+
+
+          <!-- RESOURCE MANAGEMENT -->
+
+          <div class="card">
+
+            <div class="card-top">
+
+              <div>
+
+                <span class="section-label">
+                  DATABASE
+                </span>
+
+                <h3>
+                  Manage Resources
+                </h3>
+
+              </div>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+              <table>
+
+                <thead>
+
+                  <tr>
+
+                    <th>
+                      Name
+                    </th>
+
+                    <th>
+                      Category
+                    </th>
+
+                    <th>
+                      Actions
+                    </th>
+
+                  </tr>
+
+                </thead>
+
+
+                <tbody
+                  id="adminResourceTable"
+                ></tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =====================================================
+       LEAFLET JS
+  ====================================================== -->
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  ></script>
+
+
+  <!-- =====================================================
+       RESQGO APPLICATION JS
+  ====================================================== -->
+
+  <script src="script.js"></script>
+
+</body>
+</html>
